@@ -45,7 +45,7 @@ class TestInternalServer(unittest.TestCase):
 	# 	with self.assertRaises(Exception) as cm:
 	# 		self.internal_server._DuckDBInternalServer__load_httpserver()
 	# 	self.assertEqual(str(cm.exception), constants.LOAD_HTTPSERVER_FAILURE_MESSAGE)
-	
+
 	@patch('builtins.print')
 	def test_start(self, mock_start_print):
 		self.internal_server.start(os.getcwd() + "\\temp.db", extension_downloaded=False)

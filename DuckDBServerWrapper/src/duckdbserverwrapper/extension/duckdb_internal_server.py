@@ -5,6 +5,7 @@ from typing import Dict
 import duckdb
 import pandas as pd
 import requests
+import json
 
 class DuckDBInternalServer(DuckDBServer):
 
@@ -35,7 +36,7 @@ class DuckDBInternalServer(DuckDBServer):
 			self.__close_connection()
 
 	def execute(self, url : str, body : str, headers : dict = {'Content-Type': 'application/json'}):
-		response = requests.post(url, json=body, headers=headers)
+		response = requests.post(url, data=body, headers=headers)
 		return self.__convert(response)
 
 	def _setup_extension(self, connection):
@@ -44,9 +45,11 @@ class DuckDBInternalServer(DuckDBServer):
 	
 	def __convert(self, response):
 		if response.status_code == 200:
-			json_data = response.json()
-			df = pd.DataFrame(json_data['data'], columns=json_data['columns'])
-			return df
+			fetched_data = []
+			for data in response.iter_lines():
+				if data:
+					fetched_data.append(json.loads(data))	
+			return pd.DataFrame(fetched_data)
 		else:
 			raise Exception(f"Error executing request: {response.status_code} - {response.text}")
 
