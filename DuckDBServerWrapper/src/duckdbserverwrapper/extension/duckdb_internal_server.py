@@ -1,6 +1,5 @@
 from duckdbserverwrapper.server.duckdb_server import DuckDBServer
-from duckdbserverwrapper.constant.constants import *
-from typing import Dict
+from duckdbserverwrapper.constant.constants import Constants
 
 import duckdb
 import pandas as pd
@@ -26,22 +25,23 @@ class DuckDBInternalServer(DuckDBServer):
 		if readonly:
 			self.__load_httpserver()
 			
-		self.connection.execute(HTTPSERVER_START_QUERY.format(host=host, port=port))
-		print(SERVER_START_SUCCESS_MESSAGE)
+		self.connection.execute(Constants.HTTPSERVER_START_QUERY.format(host=host, port=port))
+		print(Constants.SERVER_START_SUCCESS_MESSAGE)
 
 	def stop(self):
 			self.__load_httpserver()
-			self.connection.execute(HTTPSERVER_STOP_QUERY)
-			print(SERVER_STOP_SUCCESS_MESSAGE)
+			self.connection.execute(Constants.HTTPSERVER_STOP_QUERY)
+			print(Constants.SERVER_STOP_SUCCESS_MESSAGE)
 			self.__close_connection()
 
+	#TODO: Remove this functionality and move to a client
 	def execute(self, url : str, body : str, headers : dict = {'Content-Type': 'application/json'}):
 		response = requests.post(url, data=body, headers=headers)
 		return self.__convert(response)
 
 	def _setup_extension(self, connection):
-		connection.execute(HTTPSERVER_PLUGIN_DOWNLOAD_QUERY)
-		print(HTTPSERVER_INSTALL_SUCCESS_MESSAGE)
+		connection.execute(Constants.HTTPSERVER_PLUGIN_DOWNLOAD_QUERY)
+		print(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE)
 	
 	def __convert(self, response):
 		if response.status_code == 200:
@@ -63,14 +63,14 @@ class DuckDBInternalServer(DuckDBServer):
 		try:
 			self.connection.close()
 			self.connection= None
-			print(CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.host, port=self.port))
+			print(Constants.CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.host, port=self.port))
 		except Exception as e:
 			raise Exception("Exception encountered when attempting to close DB connection to " + self.host + ":" + str(self.port) \
 				+ ". Connection may still be open. Exception: " + e)
 		
 	def __load_httpserver(self):
 		try:
-			self.connection.execute(LOAD_HTTPSERVER_QUERY)
-			print(LOAD_HTTPSERVER_SUCCESS_MESSAGE)
+			self.connection.execute(Constants.LOAD_HTTPSERVER_QUERY)
+			print(Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE)
 		except Exception as e:
-			raise Exception(LOAD_HTTPSERVER_FAILURE_MESSAGE)
+			raise Exception(Constants.LOAD_HTTPSERVER_FAILURE_MESSAGE)
