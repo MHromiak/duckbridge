@@ -3,7 +3,7 @@ class Constants:
 
 	HTTPSERVER_PLUGIN_DOWNLOAD_QUERY = "INSTALL httpserver FROM community;"
 	LOAD_HTTPSERVER_QUERY = "LOAD httpserver;"
-	HTTPSERVER_START_QUERY = "SELECT httpserve_start('{host}', '{port}', '');"
+	HTTPSERVER_START_QUERY = "SELECT httpserve_start('{host}', '{port}', '{auth}');"
 	HTTPSERVER_STOP_QUERY = "SELECT httpserve_stop();"
 
 
