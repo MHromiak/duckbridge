@@ -10,13 +10,14 @@ class DuckDBServer(Server):
 		self.connection = None
 		self.port = None
 		self.host = None
-		self.auth_info = ''
+		self.auth_info = None
 
 	def start(self, path: str, host : str = "127.0.0.1", port : int = 8080, 
-		   readonly = True, extension_downloaded = False, auth: AuthenticationEnum = AuthenticationEnum.NOTHING):
+		   readonly = True, extension_downloaded = False, auth_type: AuthenticationEnum = AuthenticationEnum.NOTHING, auth_info: str = ""):
 		self.__create_connection(path)
 		self.host = host
 		self.port = port
+		self.auth_info = auth_info
 
 		if not extension_downloaded:
 			self._setup_extension(self.connection)
