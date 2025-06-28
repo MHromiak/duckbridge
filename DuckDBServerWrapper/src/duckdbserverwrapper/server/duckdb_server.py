@@ -2,9 +2,11 @@ from duckdbserverwrapper.server.server import Server
 from duckdbserverwrapper.constant.constants import Constants
 from duckdbserverwrapper.enum.authentication_enum import AuthenticationEnum
 
-import duckdb
+import duckdb, logging
 
 class DuckDBServer(Server):
+	logger = logging.getLogger(__name__)
+	logger.addHandler(logging.NullHandler())
 
 	def __init__(self):
 		self.connection = None
@@ -19,46 +21,51 @@ class DuckDBServer(Server):
 		self.port = port
 		self.auth_info = auth_info
 
-		if not extension_downloaded:
-			self._setup_extension(self.connection)
-			extension_downloaded = True
+		if self.connection != None:
+			if not extension_downloaded:
+				self._setup_extension(self.connection)
+				extension_downloaded = True
 
-		if readonly:
-			self.__load_httpserver()
-			self.connection.execute(Constants.HTTPSERVER_START_QUERY.format(host=host, port=port, auth=self.auth_info))
-			print(Constants.SERVER_START_SUCCESS_MESSAGE)
+			if readonly:
+				httpserver_loaded : bool = self.__load_httpserver()
+				if httpserver_loaded:
+					self.connection.execute(Constants.HTTPSERVER_START_QUERY.format(host=host, port=port, auth=self.auth_info))
+					self.logger.info(Constants.SERVER_START_SUCCESS_MESSAGE)
 
-		else:
-			print("Server not started in readonly mode. Disabling HTTP requests until restarted in readonly mode.")
+			else:
+				print("Server not started in readonly mode. Disabling HTTP requests until restarted in readonly mode.")
 
 	def stop(self):
 			self.__load_httpserver()
 			self.connection.execute(Constants.HTTPSERVER_STOP_QUERY)
-			print(Constants.SERVER_STOP_SUCCESS_MESSAGE)
+			self.logger.info(Constants.SERVER_STOP_SUCCESS_MESSAGE)
 			self.__close_connection()
 
 	def _setup_extension(self, connection):
 		connection.execute(Constants.HTTPSERVER_PLUGIN_DOWNLOAD_QUERY)
-		print(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE)
+		self.logger.info(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE)
 
 	def __create_connection(self, path : str):
 		try:
 			self.connection = duckdb.connect(path)
 		except Exception as e:
-			raise Exception("Could not create connection to DuckDB database. Exception: " + e)
+			self.logger.error("Could not create connection to DuckDB database. Exception: " + e)
+			self.connection = None
 		
 	def __close_connection(self):
 		try:
 			self.connection.close()
 			self.connection= None
-			print(Constants.CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.host, port=self.port))
+			self.logger.info(Constants.CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.host, port=self.port))
 		except Exception as e:
-			raise Exception("Exception encountered when attempting to close DB connection to " + self.host + ":" + str(self.port) \
+			self.logger.error("Exception encountered when attempting to close DB connection to " + self.host + ":" + str(self.port) \
 				+ ". Connection may still be open. Exception: " + e)
 		
-	def __load_httpserver(self):
+	def __load_httpserver(self) -> bool:
 		try:
 			self.connection.execute(Constants.LOAD_HTTPSERVER_QUERY)
-			print(Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE)
+			self.logger.info(Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE)
+			return True
 		except Exception as e:
-			raise Exception(Constants.LOAD_HTTPSERVER_FAILURE_MESSAGE)
+			self.logger.error(Constants.LOAD_HTTPSERVER_FAILURE_MESSAGE)
+			return False
