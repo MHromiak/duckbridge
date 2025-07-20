@@ -1,0 +1,15 @@
+ervices:
+  - type: worker
+    name: duckdb-server
+    runtime: python
+    buildCommand: ""
+    startCommand: python start_duckbridge.py
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: HOST
+        value: "0.0.0.0"
+      - key: AUTH
+        value: "MySuperSecretKey"
+      - key: PATH
+        value: "../resources/omop_cdm.db"

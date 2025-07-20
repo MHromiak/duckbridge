@@ -1,6 +1,5 @@
-from duckdbserverwrapper import *
-from duckdbserverwrapper.constant.constants import Constants
-from unittest.mock import patch, call
+from duckbridge import *
+from duckbridge.constant.constants import Constants
 
 import os
 import pathlib as pl
@@ -12,6 +11,7 @@ class TestInternalServer(unittest.TestCase):
 		self.internal_server = DuckDBServer()
 		self.internal_server.host = ""
 		self.internal_server.port = 0
+		self.server_logger_name = self.internal_server.__class__.logger.name
 
 	def tearDown(self):
 		self.internal_server._DuckDBServer__close_connection()
@@ -27,27 +27,29 @@ class TestInternalServer(unittest.TestCase):
 		self.assertIsFile(os.getcwd() + "\\temp.db")
 		self.assertIsNotNone(self.internal_server.connection)
 
-	@patch('builtins.print')
-	def test_setup_extension(self, mock_setup_print):
-		self.internal_server._DuckDBServer__create_connection(os.getcwd() + "\\temp.db")
-		self.internal_server._setup_extension(self.internal_server.connection)
-		mock_setup_print.assert_called_once_with(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE)
+	def test_setup_extension(self):
+		with self.assertLogs(self.server_logger_name, level="INFO") as l:
+			self.internal_server._DuckDBServer__create_connection(os.getcwd() + "\\temp.db")
+			self.internal_server._setup_extension(self.internal_server.connection)
 
-	@patch('builtins.print')
-	def test_load_httpserver_when_setup(self, mock_load_print):
-		self.internal_server._DuckDBServer__create_connection(os.getcwd() + "\\temp.db")
-		self.internal_server._setup_extension(self.internal_server.connection)
-		self.internal_server._DuckDBServer__load_httpserver()
-		mock_load_print.assert_has_calls([call(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE), call(Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE)])
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE in l.output)
 
-	@patch('builtins.print')
-	def test_start(self, mock_start_print):
-		self.internal_server.start(os.getcwd() + "\\temp.db", extension_downloaded=False)
-		self.assertEqual("localhost", self.internal_server.host)
+	def test_load_httpserver_when_setup(self):
+		with self.assertLogs(self.server_logger_name, level="INFO") as l:
+			self.internal_server._DuckDBServer__create_connection(os.getcwd() + "\\temp.db")
+			self.internal_server._setup_extension(self.internal_server.connection)
+			self.internal_server._DuckDBServer__load_httpserver()
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE in l.output)
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE in l.output)
+
+	def test_start(self):
+		with self.assertLogs(self.server_logger_name, level="INFO") as l:
+			self.internal_server.start(os.getcwd() + "\\temp.db", extension_downloaded=False)
+		self.assertEqual("127.0.0.1", self.internal_server.host)
 		self.assertEqual(8080, self.internal_server.port)
-		mock_start_print.assert_has_calls([call(Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE),
-									 call(Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE),
-									 call(Constants.SERVER_START_SUCCESS_MESSAGE)])
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.HTTPSERVER_INSTALL_SUCCESS_MESSAGE in l.output)
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.LOAD_HTTPSERVER_SUCCESS_MESSAGE in l.output)
+		self.assertTrue("INFO:" + self.server_logger_name + ":" + Constants.SERVER_START_SUCCESS_MESSAGE in l.output)
 	
 		
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
-from duckdbserverwrapper.client.client import Client
-from duckdbserverwrapper.enum.authentication_enum import AuthenticationEnum
+from duckbridge.client.client import Client
+from duckbridge.enum.authentication_enum import AuthenticationEnum
 
 import requests
 import json

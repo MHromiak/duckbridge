@@ -1,10 +1,11 @@
 [project]
-name = "duckdbserverwrapper"
+name = "duckbridge"
 version = "0.2.0"
 description = ""
 authors = [
     {name = "Markian Hromiak",email = "markian.hromiak@yahoo.com"}
 ]
+description = "A lightweight client-server library fluently extending DuckDB's httpserver setup to Python"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -12,9 +13,18 @@ dependencies = [
     "pandas (>=2.2.3,<3.0.0)",
     "requests (>=2.32.3,<3.0.0)",
 ]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
 
 [tool.poetry]
-packages = [{include = "duckdbserverwrapper", from = "src"}]
+packages = [{include = "duckbridge", from = "src"}]
+
+[tool.setuptools]
+packages = ["duckbridge"]
+package-dir = {"" = "src"}
 
 
 [tool.poetry.group.dev.dependencies]

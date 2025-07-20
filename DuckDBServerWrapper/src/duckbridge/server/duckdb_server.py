@@ -1,6 +1,5 @@
-from duckdbserverwrapper.server.server import Server
-from duckdbserverwrapper.constant.constants import Constants
-from duckdbserverwrapper.enum.authentication_enum import AuthenticationEnum
+from duckbridge.server.server import Server
+from duckbridge.constant.constants import Constants
 
 import duckdb, logging
 
@@ -15,7 +14,7 @@ class DuckDBServer(Server):
 		self.auth_info = None
 
 	def start(self, path: str, host : str = "127.0.0.1", port : int = 8080, 
-		   readonly = True, extension_downloaded = False, auth_type: AuthenticationEnum = AuthenticationEnum.NOTHING, auth_info: str = ""):
+		   readonly = True, extension_downloaded = False, auth_info: str = ""):
 		self.__create_connection(path)
 		self.host = host
 		self.port = port
