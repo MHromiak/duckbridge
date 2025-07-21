@@ -1,6 +1,6 @@
-ervices:
+services:
   - type: worker
-    name: duckdb-server
+    name: duckbridge
     runtime: python
     buildCommand: ""
     startCommand: python start_duckbridge.py

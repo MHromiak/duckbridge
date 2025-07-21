@@ -15,6 +15,3 @@ bridge.start(path=PATH,
 					readonly=True,
 					extension_downloaded=False,
 					auth_info=AUTH)
-
-while True:
-	time.sleep(60)
