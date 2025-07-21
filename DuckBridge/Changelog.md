@@ -1,4 +1,11 @@
 
+## [0.3.0]
+
+### Added/Modified
+- Refactored unit tests to use new logging functionality
+- Added suggested scripts for starting a bridge in Render
+- Renamed duckdbserverwrapper to duckbridge for conciseness.
+
 ## [0.2.0]
 
 ### Added/Modified
