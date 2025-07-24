@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Client(ABC):
+class Client(ABC): # pragma: no cover
 
 	@abstractmethod
 	def execute(self):
