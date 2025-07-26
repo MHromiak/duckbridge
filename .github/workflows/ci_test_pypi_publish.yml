@@ -28,25 +28,24 @@ jobs:
           python-version: "3.12"
 
       - name: Install build tools
-        run: 
+        run: |
           python3 -m pip install --upgrade build
           python3 -m pip install --upgrade twine
-          python3 -m pip install --upgrade unittest
           python3 -m pip install --upgrade coverage
 
       - name: Run tests and generate coverage
-        run:
+        run: |
           coverage run --branch -m unittest discover -s tests -p "test*.py"
           coverage -m report
           coverage xml
 
       - name: Build distributable
         run:
-          python -m build
+          python3 -m build
 
       - name: Publish to PyPI
         env:
           TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
           TWINE_USERNAME: __token__
         run:
-          python -m twine upload --repository testpypi dist/*
+          python3 -m twine upload --repository testpypi dist/*
