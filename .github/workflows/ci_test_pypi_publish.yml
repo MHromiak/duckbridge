@@ -29,9 +29,7 @@ jobs:
 
       - name: Install build tools
         run: |
-          python3 -m pip install --upgrade build
-          python3 -m pip install --upgrade twine
-          python3 -m pip install --upgrade coverage
+          python3 -m pip install --upgrade build twine coverage duckdb requests pandas
 
       - name: Run tests and generate coverage
         run: |
