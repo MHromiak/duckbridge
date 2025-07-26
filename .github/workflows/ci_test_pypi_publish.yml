@@ -35,7 +35,7 @@ jobs:
         run: |
           export PYTHONPATH=$PYTHONPATH:$(pwd)/src
           coverage run --branch -m unittest discover -s ./tests -p "test*.py"
-          coverage -m report
+          coverage report
           coverage xml
 
       - name: Build distributable

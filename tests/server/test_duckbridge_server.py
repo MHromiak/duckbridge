@@ -93,7 +93,6 @@ class TestDuckbridgeServer(unittest.TestCase):
         mock_connect.side_effect = Exception("DuckDB Connection Exception")
         with self.assertLogs(self.server_logger_name, level="ERROR") as l:
             self.internal_server._DuckbridgeServer__create_connection(pl.Path(os.getcwd(), "temp.db"))
-        print(l.output)
         self.assertTrue(l.output[
                             0] == "ERROR:duckbridge.server.duckbridge_server:DuckbridgeServer | create_connection | Could not create connection to DuckDB database. Exception: DuckDB Connection Exception")
 
