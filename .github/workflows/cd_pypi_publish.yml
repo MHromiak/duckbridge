@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: CD to PyPI from develop
+name: CD to Prod PyPI from develop
 
 on:
   push:

@@ -6,7 +6,7 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: CI to PyPI's test envrionment from any non-develop branch
+name: CI to Test PyPI from any non-develop branch
 
 on:
   push:
@@ -47,4 +47,4 @@ jobs:
           TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
           TWINE_USERNAME: __token__
         run:
-          python3 -m twine upload --repository testpypi dist/*
+          python3 -m twine upload --repository testpypi dist/* -u $TWINE_USERNAME -p $TWINE_PASSWORD
