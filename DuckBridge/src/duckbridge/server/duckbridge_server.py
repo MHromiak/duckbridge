@@ -2,13 +2,14 @@ from duckbridge.server.server import Server
 from duckbridge.constant.constants import Constants
 
 import duckdb, logging
+from duckdb import DuckDBPyConnection
 
 class DuckbridgeServer(Server):
 	logger = logging.getLogger(__name__)
 	logger.addHandler(logging.NullHandler())
 	
 	def __init__(self):
-		self.__connection = None
+		self.__connection : DuckDBPyConnection = None
 		self.__port = None
 		self.__host = None
 		self.__auth_info = None
@@ -23,7 +24,6 @@ class DuckbridgeServer(Server):
 		if self.__connection != None:
 			if not extension_downloaded:
 				self._setup_extension(self.__connection)
-				extension_downloaded = True
 
 			if readonly:
 				httpserver_loaded : bool = self.__load_httpserver()
@@ -32,7 +32,7 @@ class DuckbridgeServer(Server):
 					self.logger.info("DuckbridgeServer | start | " + Constants.SERVER_START_SUCCESS_MESSAGE)
 
 			else:
-				self.logger.info("DuckbridgeServer | start | Server not started in readonly mode. Disabling HTTP requests until restarted in readonly mode.")
+				self.logger.info("DuckbridgeServer | start | Server not started in readonly mode. Disabling HTTP requests until restarted in readonly mode")
 
 	def stop(self):
 			self.__load_httpserver()
@@ -49,14 +49,14 @@ class DuckbridgeServer(Server):
 			try:
 				self.__connection = duckdb.connect(path)
 			except Exception as e:
-				self.logger.error("DuckbridgeServer | create_connection | Could not create connection to DuckDB database. Exception: " + e)
+				self.logger.error(f"DuckbridgeServer | create_connection | Could not create connection to DuckDB database. Exception: {e}")
 				self.__connection = None
 		
 	def __close_connection(self):
 		try:
 			self.__connection.close()
 			self.__connection= None
-			self.logger.info("DuckbridgeServer | close_connection | " + Constants.CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.host, port=self.port))
+			self.logger.info("DuckbridgeServer | close_connection | " + Constants.CLOSE_CONNECTION_SUCCESS_MESSAGE.format(host=self.__host, port=self.__port))
 		except Exception as e:
 			self.logger.error("DuckbridgeServer | close_connection | Exception encountered when attempting to close DB connection. Connection may still be open. Exception: " + str(e))
 		
@@ -71,6 +71,6 @@ class DuckbridgeServer(Server):
 		
 	def __connection_exists(self) -> bool:
 		if self.__connection != None:
-			self.logger.error("DuckbridgeServer | create_connection | Could not create connection as one currently exists. Duckbridge does not yet support multiple connections per server.")
+			self.logger.error("DuckbridgeServer | create_connection | Could not create connection as one currently exists. Duckbridge does not yet support multiple connections per server")
 			return True
 		return False
