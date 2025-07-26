@@ -10,8 +10,6 @@ name: CI to PyPI's test envrionment from any non-develop branch
 
 on:
   push:
-    branches:
-      - '*'
     branches-ignore:
       - develop
 jobs:
