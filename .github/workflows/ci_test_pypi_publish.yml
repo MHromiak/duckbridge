@@ -35,7 +35,7 @@ jobs:
 
       - name: Run tests and generate coverage
         run: |
-	  pwd
+          pwd
           coverage run --branch -m unittest discover -s tests -p "test*.py"
           coverage -m report
           coverage xml
