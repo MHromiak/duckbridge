@@ -33,15 +33,9 @@ jobs:
           python3 -m pip install --upgrade twine
           python3 -m pip install --upgrade coverage
 
-      - name: Debug path
-        run: |
-          echo $PYTHONPATH
-          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
-          echo $PYTHONPATH
-
       - name: Run tests and generate coverage
         run: |
-          coverage run --branch -m unittest discover -s tests -p "test*.py"
+          coverage run --branch -m unittest discover
           coverage -m report
           coverage xml
 
