@@ -45,4 +45,4 @@ jobs:
       - name: Publish to PyPI
 
         run:
-          python3 -m twine upload --repository testpypi dist/* -u __token__ -p ${{ secrets.TEST_PYPI_API_TOKEN }}
+          python3 -m twine upload --verbose --repository testpypi dist/* -u __token__ -p ${{ secrets.TEST_PYPI_API_TOKEN }}
