@@ -38,6 +38,10 @@ jobs:
           coverage report
           coverage xml
 
+      - name: Clean old builds
+        run:
+          rm -rf dist/*
+
       - name: Build distributable
         run:
           python3 -m build

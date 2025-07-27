@@ -43,6 +43,10 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
+      - name: Clean old builds
+        run:
+          rm -rf dist/*
+
       - name: Build distributable
         run:
           python -m build
