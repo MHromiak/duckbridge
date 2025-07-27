@@ -30,7 +30,7 @@
             <mxPoint x="33" y="-5" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-40" value="DuckDBServer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;fontColor=#393C56;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-40" value="DuckbridgeServer" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;fontColor=#393C56;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="180" y="290" width="300" height="330" as="geometry" />
         </mxCell>
         <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-60" value="+&lt;i&gt;&amp;nbsp;&lt;/i&gt;connection: DuckDBPyConnection" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=none;fontColor=#393C56;rounded=1;" vertex="1" parent="kcf2LkI8dwvKkDhvZ8Tp-40">
@@ -96,7 +96,7 @@
             <mxPoint x="-10" y="-14" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-80" value="DuckDBClient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;fontColor=#393C56;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+        <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-80" value="DuckbridgeClient" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=#F2CC8F;strokeColor=#E07A5F;fontColor=#393C56;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="560" y="290" width="280" height="240" as="geometry" />
         </mxCell>
         <mxCell id="kcf2LkI8dwvKkDhvZ8Tp-82" value="-&amp;nbsp; ssh_host: str" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;labelBackgroundColor=none;fontColor=#393C56;rounded=1;" vertex="1" parent="kcf2LkI8dwvKkDhvZ8Tp-80">

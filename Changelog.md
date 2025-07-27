@@ -1,4 +1,16 @@
 
+## [0.4.0]
+
+### Added/Modified
+- Moved changelog to top-level directory for Github display
+- Added Github Actions workflow to deploy new versions to PyPI via automation
+- Added a .coveragerc for easier unittest coverage calculations
+- Completed testing for new logging functionality
+- Updated UML class diagram
+
+### Removed
+- Removed AuthenticationEnum and Enum module, replacing options with string inputs instead
+
 ## [0.3.0]
 
 ### Added/Modified
