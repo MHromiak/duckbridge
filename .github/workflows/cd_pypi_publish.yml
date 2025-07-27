@@ -48,8 +48,6 @@ jobs:
           python -m build
 
       - name: Publish to PyPI
-        env:
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-          TWINE_USERNAME: __token__
+
         run:
-          python -m twine upload dist/*
+          python3 -m twine upload --verbose dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
