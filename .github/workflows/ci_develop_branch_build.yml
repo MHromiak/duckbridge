@@ -1,0 +1,41 @@
+name: Confirm develop builds before merging
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize]
+jobs:
+  deploy:
+    if: github.head_ref == 'develop'
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: |
+          python3 -m pip install --upgrade build twine coverage duckdb requests pandas
+
+      - name: Run tests and generate coverage
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          coverage run --branch -m unittest discover -s ./tests -p "test*.py"
+          coverage report --fail-under=95
+          coverage xml
+
+      - name: Clean old builds
+        run:
+          rm -rf dist/*
+
+      - name: Build distributable
+        run:
+          python3 -m build
