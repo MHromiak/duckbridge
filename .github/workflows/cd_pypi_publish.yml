@@ -55,3 +55,20 @@ jobs:
 
         run:
           python3 -m twine upload --verbose dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Extract version and tag the commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep version pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          TAG="v$VERSION"
+
+          echo "Tagging release with $TAG"
+
+          # Set up Git user for tagging
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Create and push the tag
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"

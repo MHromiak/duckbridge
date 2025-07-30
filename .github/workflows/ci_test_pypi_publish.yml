@@ -42,6 +42,32 @@ jobs:
         run:
           rm -rf dist/*
 
+      - name: Determine next dev version
+        id: get_version
+        run: |
+          BASE_VERSION=$(grep version pyproject.toml | sed 's/.*"\(.*\)".*/\1/' | sed 's/-dev[0-9]*//')
+          echo "Base version: $BASE_VERSION"
+
+          PACKAGE_NAME="duckbridge"
+          RESPONSE=$(curl -s https://test.pypi.org/pypi/${PACKAGE_NAME}/json || echo '{}')
+
+          NEXT_DEV=1
+          if echo "$RESPONSE" | jq -e '.releases' > /dev/null; then
+            DEV_VERSIONS=$(echo "$RESPONSE" | jq -r '.releases | keys[]' | grep "${BASE_VERSION}-dev" || true)
+            if [[ -n "$DEV_VERSIONS" ]]; then
+              LAST_DEV=$(echo "$DEV_VERSIONS" | sed "s/${BASE_VERSION}-dev//" | sort -nr | head -n1)
+              NEXT_DEV=$((LAST_DEV + 1))
+            fi
+          fi
+
+          NEW_VERSION="${BASE_VERSION}-dev${NEXT_DEV}"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+
+      - name: Update pyproject.toml with new version
+        run: |
+          sed -i "s/^version = \".*\"/version = \"${{ steps.get_version.outputs.new_version }}\"/" pyproject.toml
+
       - name: Build distributable
         run:
           python3 -m build
