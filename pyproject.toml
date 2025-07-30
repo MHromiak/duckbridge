@@ -1,6 +1,6 @@
 [project]
 name = "duckbridge"
-version = "v0.4.0"
+version = "v0.4.1"
 authors = [
     {name = "Markian Hromiak",email = "markian.hromiak@yahoo.com"}
 ]

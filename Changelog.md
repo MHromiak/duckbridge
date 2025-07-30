@@ -1,4 +1,10 @@
 
+## [0.4.1]
+
+### Added/Modified
+- Added documentation for all implemented classes
+- Updated workflows to automate tes-pypi version bumping and production tagging
+
 ## [0.4.0]
 
 ### Added/Modified

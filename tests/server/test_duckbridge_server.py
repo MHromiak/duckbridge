@@ -96,13 +96,17 @@ class TestDuckbridgeServer(unittest.TestCase):
         self.assertTrue(l.output[
                             0] == "ERROR:duckbridge.server.duckbridge_server:DuckbridgeServer | create_connection | Could not create connection to DuckDB database. Exception: DuckDB Connection Exception")
 
-    def test_connection_exists_true(self):
+    def test_create_connection_while_connection_exists(self):
         self.internal_server._DuckbridgeServer__create_connection(str(pl.Path(os.getcwd(), "temp.db")))
         with self.assertLogs(self.server_logger_name, level="ERROR") as l:
-            exists: bool = self.internal_server._DuckbridgeServer__connection_exists()
-        self.assertTrue(exists)
+            self.internal_server._DuckbridgeServer__create_connection("Any path here")
         self.assertTrue(l.output[
                             0] == "ERROR:duckbridge.server.duckbridge_server:DuckbridgeServer | create_connection | Could not create connection as one currently exists. Duckbridge does not yet support multiple connections per server")
+
+    def test_connection_exists_true(self):
+        self.internal_server._DuckbridgeServer__create_connection(str(pl.Path(os.getcwd(), "temp.db")))
+        exists: bool = self.internal_server._DuckbridgeServer__connection_exists()
+        self.assertTrue(exists)
 
     def test_stop(self):
         host = "127.0.0.1"
