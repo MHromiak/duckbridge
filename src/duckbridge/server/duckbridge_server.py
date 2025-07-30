@@ -22,15 +22,14 @@ class DuckbridgeServer(Server):
 
 	Methods
 	-------
-	start(path: str, host : str = "127.0.0.1", port : int = 8080, 
-			readonly = True, extension_downloaded = False, auth_info: str = "") -> None:
+	start(path, host, port, readonly, extension_downloaded, auth_info) -> None:
 		Start the server on http://host:port, with given 'auth', for database at path.
 	stop() -> None:
 		Stop the server's connection to the database. Only one connection is 
 		associated with each server.
 	_setup_extension(connection) -> None:
 		Install the httpserver extension on the connection's database.
-	__create_connection(path : str) -> None:
+	__create_connection(path) -> None:
 		Attempt to connect to a database located at 'path'.
 	__close_connection() -> None:
 		Attempt to close the server's database connection.
@@ -39,6 +38,7 @@ class DuckbridgeServer(Server):
 	__connection_exists() -> bool:
 		Check if the server has an existing connection.
 	"""
+
 	logger = logging.getLogger(__name__)
 	logger.addHandler(logging.NullHandler())
 	
@@ -92,7 +92,7 @@ class DuckbridgeServer(Server):
 		self.logger.info(Constants.SERVER_STOP_SUCCESS_MESSAGE)
 		self.__close_connection()
 
-	def _setup_extension(self, connection) -> None:
+	def _setup_extension(self, connection : DuckDBPyConnection) -> None:
 		"""
 		Install the httpserver extension on the connection's database.
 
