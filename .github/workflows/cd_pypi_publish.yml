@@ -10,7 +10,7 @@ name: CD to Prod PyPI from develop
 
 on:
   push:
-    branches: develop
+    branches: main
 
 jobs:
   deploy:
