@@ -1,0 +1,74 @@
+# This workflow will upload a Python Package to PyPI when a release is created
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: CD to Prod PyPI from develop
+
+on:
+  push:
+    branches: main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install build tools
+        run: |
+          python3 -m pip install --upgrade build twine coverage duckdb requests pandas
+
+      - name: Run tests and generate coverage
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/src
+          coverage run --branch -m unittest discover -s ./tests -p "test*.py"
+          coverage report
+          coverage xml
+          
+      - name: Upload results to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Clean old builds
+        run:
+          rm -rf dist/*
+
+      - name: Build distributable
+        run:
+          python -m build
+
+      - name: Publish to PyPI
+
+        run:
+          python3 -m twine upload --verbose dist/* -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Extract version and tag the commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION=$(grep version pyproject.toml | sed 's/.*"\(.*\)".*/\1/')
+          TAG="v$VERSION"
+
+          echo "Tagging release with $TAG"
+
+          # Set up Git user for tagging
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          # Create and push the tag
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"

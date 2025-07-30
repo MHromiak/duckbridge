@@ -1,0 +1,34 @@
+[project]
+name = "duckbridge"
+version = "v0.4.1"
+authors = [
+    {name = "Markian Hromiak",email = "markian.hromiak@yahoo.com"}
+]
+description = "A lightweight client-server library fluently extending DuckDB's httpserver setup to Python"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb (>=1.3.0,<2.0.0)",
+    "pandas (>=2.2.3,<3.0.0)",
+    "requests (>=2.32.3,<3.0.0)",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+
+[tool.poetry]
+packages = [{include = "duckbridge", from = "src"}]
+
+[tool.setuptools]
+packages = ["duckbridge"]
+package-dir = {"" = "src"}
+
+
+[tool.poetry.group.dev.dependencies]
+sphinx = "^8.2.3"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
