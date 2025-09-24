@@ -1,4 +1,4 @@
-# DuckBridge
+# 🦆🌉 DuckBridge
 Lightweight Python library enabling fully pythonic interfacing with the DuckDB extension `httpserver` (extension developed by @quackscience). 
 
 [![PyPI](https://img.shields.io/pypi/v/duckbridge.svg)](https://pypi.org/project/duckbridge/)

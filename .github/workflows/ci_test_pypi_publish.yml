@@ -12,6 +12,7 @@ on:
   push:
     branches-ignore:
       - develop
+      - main
 jobs:
   deploy:
     runs-on: ubuntu-latest
